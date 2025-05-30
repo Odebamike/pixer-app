@@ -39,4 +39,4 @@ jobs:
 
       - name: Run new container
         run: |
-          docker run -d --name $IMAGE_NAME -p 80:80 $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
+          docker run -d --name $IMAGE_NAME -p 8080:80 $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
