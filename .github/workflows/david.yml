@@ -9,7 +9,7 @@ jobs:
     runs-on: self-hosted
 
     env:
-      IMAGE_NAME: pixer
+      IMAGE_NAME: pixer2
       IMAGE_TAG: latest
       REGISTRY: docker.io
 
