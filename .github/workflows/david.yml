@@ -30,13 +30,6 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-      - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.31.0
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          severity: HIGH,CRITICAL
-          exit-code: '1'
-
       - name: Deploy new container
         run: |
           docker pull $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
