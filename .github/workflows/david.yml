@@ -26,17 +26,17 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG .
+          sudo docker build -t $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG .
 
       - name: Push Docker image
         run: |
-          docker push $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
+          sudo docker push $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
 
       - name: Stop and remove old container (if running)
         run: |
-          docker stop $IMAGE_NAME || true
-          docker rm $IMAGE_NAME || true
+          sudo docker stop $IMAGE_NAME || true
+          sudo docker rm $IMAGE_NAME || true
 
       - name: Run new container
         run: |
-          docker run -d --name $IMAGE_NAME -p 8080:80 $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
+          sudo docker run -d --name $IMAGE_NAME -p 8080:80 $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
