@@ -1,7 +1,7 @@
-FROM nginx:alpine
+FROM httpd:2.4-alpine
 
-RUN rm -rf /usr/share/nginx/html/*
+RUN rm -rf /usr/local/apache2/htdocs/*
 
-COPY . /usr/share/nginx/html
+COPY . /usr/local/apache2/htdocs/
 
 EXPOSE 80
