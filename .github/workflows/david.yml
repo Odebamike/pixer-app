@@ -24,11 +24,18 @@ jobs:
 
       - name: Build Docker image
         run: |
-         sudo docker build -t $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG .
+          sudo docker build -t $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG .
 
       - name: Run Trivy vulnerability scan
         run: |
-         sudo trivy image --exit-code 1 --severity HIGH,CRITICAL $REGISTRY/$IMAGE_NAME:$IMAGE_TAG || true
+          IMAGE=$REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
+          echo "Scanning image: $IMAGE"
+          sudo trivy image \
+            --exit-code 1 \
+            --severity HIGH,CRITICAL \
+            --format table \
+            --output trivy-report.txt \
+            "$IMAGE"
 
       - name: Upload Trivy report
         uses: actions/upload-artifact@v4
