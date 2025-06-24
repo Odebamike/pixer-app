@@ -25,13 +25,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Debug SONAR_HOST_URL (temporary)
-        run: |
-          echo "SONAR_HOST_URL: $SONAR_HOST_URL"
-          curl -Is $SONAR_HOST_URL | head -n 1
-        env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         env:
