@@ -26,7 +26,9 @@ jobs:
           java-version: '17'
 
       - name: Debug SONAR_HOST_URL (temporary)
-        run: echo "Sonar Host URL is $SONAR_HOST_URL"
+        run: |
+          echo "SONAR_HOST_URL: $SONAR_HOST_URL"
+          curl -Is $SONAR_HOST_URL | head -n 1
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
