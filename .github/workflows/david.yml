@@ -66,3 +66,56 @@ jobs:
       - name: Run new container
         run: |
           sudo docker run -d --name $IMAGE_NAME -p 8080:80 $REGISTRY/${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
+
+  notify-success:
+    needs: deploy
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send success email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.EMAIL_SERVER }}
+          server_port: ${{ secrets.EMAIL_PORT }}
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "✅ CI/CD Success: ${{ github.repository }}"
+          to: ${{ secrets.EMAIL_RECEIVER }}
+          from: "CI System <${{ secrets.EMAIL_USERNAME }}>"
+          body: |
+            🎉 Deployment Successful!
+
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            Actor: ${{ github.actor }}
+            Workflow: ${{ github.workflow }}
+
+            Check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+  notify-failure:
+    needs: deploy
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send failure email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.EMAIL_SERVER }}
+          server_port: ${{ secrets.EMAIL_PORT }}
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "❌ CI/CD Failure: ${{ github.repository }}"
+          to: ${{ secrets.EMAIL_RECEIVER }}
+          from: "CI System <${{ secrets.EMAIL_USERNAME }}>"
+          body: |
+            🚨 Deployment Failed!
+
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            Actor: ${{ github.actor }}
+            Workflow: ${{ github.workflow }}
+
+            Check the failure here:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
